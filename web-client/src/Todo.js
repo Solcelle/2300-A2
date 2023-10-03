@@ -1,16 +1,23 @@
 import React from 'react'
 
-export default function Todo({ todo, toggleTodo }) {
+export default function Todo({ todo, toggleTodo, deleteTodo }) {
 	function handleClick() {
 		toggleTodo(todo.id)
 	}
 
+	function handleDelete() {
+		deleteTodo(todo.id)
+	}
+
 	return (
-		<div>
-			<label>
-			<input type='checkbox' checked={todo.done} onChange={handleClick}/>
+		<label>
+			<input className='Checkbox' type='checkbox' checked={todo.done} onChange={handleClick}/>
+			
 			{todo.name}
-			</label>
-		</div>
+
+			<button className='Delete' onClick={handleDelete}>
+				X
+			</button>
+		</label>
 	)
 }

@@ -2,17 +2,6 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -20,19 +9,39 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(20px + 2vmin);
+  font-size: calc(30px + 2vmin);
   color: white;
+  font-weight: bold;
 }
 
-.App-link {
-  color: #61dafb;
+.Todo-list{
+	display: contents;
+	font-weight: 300;
+	font-size: calc(20px + 2vmin);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Checkbox{
+	vertical-align: middle;
+	margin-bottom: 8px;
+	margin-right: 12px;
+	scale: 1.5;
 }
+
+.Delete{
+	vertical-align: middle;
+	margin-bottom: 4px;
+	margin-left: 8px;
+	
+	font-size: calc(19px);
+	border-radius: 50%;
+	border-style: none;
+	font-weight: 600;
+
+	color: rgb(255, 254, 254);
+	background-color: rgba(191, 85, 85, 0.485);
+}
+
+.Delete:hover {
+	background-color: #b92929; /* Color when hovered over */
+  }
+

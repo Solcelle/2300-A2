@@ -3,64 +3,102 @@ import axios from 'axios';
 import './App.css';
 import TodoList from './TodoList'
 
-const RequestForm = () => {
+function App () {
   const [todos, setTodos] = useState([]);
   const todoNameRef = useRef()
 
-  useEffect(() => {
+	// GET todo list when client starts
+	useEffect(() => {
+		axios.get('http://localhost:5000/api/items/')
+			.then(response => {
+				setTodos(response.data.items);
+				console.log('GET request successful', response.data);
+			})
+			.catch(error => {
+				console.error('Error fetching data:', error);
+			});
+	}, [], todos)
 
-	axios.get('http://localhost:5000/api/items/')
-      .then(response => {
-        setTodos(response.data.items);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
+	// Send a PUT request
+	const handlePutRequest = (request) => {
+		const url = `http://localhost:5000/api/items/${request.id}`;
 
+		axios.put(url, request)
+			.then(response => {
+				console.log('PUT request successful', response.data);
+			})
+			.catch(error => {
+				console.error('Error making PUT request:', error);
+			});
+	};
 
-	// const prevTodos = getrequest
-	// setTodos()
-  	}, [])
+	// Send a DELETE request
+	const handleDeleteRequest = (id) => {
+		const url = `http://localhost:5000/api/items/${id}`;
 
-  function toggleTodo(id) {
-	const newTodos = [...todos]
-	const todo = newTodos.find(todo => todo.id === id)
-	todo.done = !todo.done
-	setTodos(newTodos)
-  }
+		axios.delete(url)
+			.then(response => {
+				console.log('DELETE request successful', response.data);
+			})
+			.catch(error => {
+				console.error('Error making DELETE request:', error);
+			});
+	};
 
-  const handleSubmit = async (e) => {
-	e.preventDefault();
+	function deleteTodo(id) {
+		const newTodos = todos.filter(todo => todo.id !== id);
 
-	const name = todoNameRef.current.value
-	if (name === '') return
+		// Update server entry
+		handleDeleteRequest(id)
 
-	const requestBody = JSON.stringify({ name });
+		// Update todolist
+		setTodos(newTodos)
+	}
 
-	const response = await fetch('http://localhost:5000/api/items/', {
-	  method: 'POST',
-	  headers: {
-		'Content-Type': 'application/json',
-		'Content-Length': requestBody.length,
-	  },
-	  body: requestBody,
-	});
-	const data = await response.json();
+	// Update done status of a todo
+  	function toggleTodo(id) {
+		const newTodos = [...todos]							// Create copy of todos
+		const todo = newTodos.find(todo => todo.id === id)	// Find todo with the id
+		todo.done = !todo.done								// Update done status
 
-	todoNameRef.current.value = null	// Clear input field
+		// Update server entry
+		handlePutRequest(todo)
 
-	// Handle the response data
-	setTodos(prevTodos => {
-		return [...prevTodos, data.item]
-	})
-	console.log(todos);
-  };
+		// Update todolist
+		setTodos(newTodos)
+	}
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+		const name = todoNameRef.current.value
+		if (name === '') return
+
+		const requestBody = JSON.stringify({ name });
+
+		const response = await fetch('http://localhost:5000/api/items/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Content-Length': requestBody.length,
+			},
+			body: requestBody,
+		});
+		const data = await response.json();
+
+		todoNameRef.current.value = null	// Clear input field
+
+		// Handle the response data
+		setTodos(prevTodos => {
+			return [...prevTodos, data.item]
+		})
+		console.log(todos);
+ 	};
   
   return (
 	<div className="App">
 		<header className="App-header">
 			Todo List
-
 			<form onSubmit={handleSubmit}>
 				<input
 					ref={todoNameRef}
@@ -68,14 +106,16 @@ const RequestForm = () => {
 				/>
 				<button type="submit">Add</button>
 			</form>
-			<TodoList todos={todos} toggleTodo={toggleTodo}/>
+			<p className="Todo-list">
+				<TodoList todos={todos} toggleTodo={toggleTodo} deleteTodo={deleteTodo}/>
+			</p>
 
 		</header>
 	</div>
   );
 };
 
-export default RequestForm;
+export default App;
 
 
 // function App() {
