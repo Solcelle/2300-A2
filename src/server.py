@@ -69,6 +69,7 @@ def create_item():
         abort(400, "Must be JSON.")
     if "name" not in request.json:
         abort(400, "Must contain 'name'-field.")
+    print(request.json)
     if not isinstance(request.json["name"], str):
         description = f"'name'-field must be str."
         abort(400, description)
