@@ -116,23 +116,3 @@ function App () {
 };
 
 export default App;
-
-
-// function App() {
-// 	const [todos, setTodos] = useState([])
-// 	return (
-// 		<div className="App">
-// 			<header className="App-header">
-
-// 				<TodoList />
-// 				<input type="text" />
-// 				<button>Add</button>
-// 				<button>Remove</button>
-				
-
-// 			</header>
-// 		</div>
-// 	);
-// }
-
-// export default App;
